@@ -1,11 +1,16 @@
 # the brew brothers
 
+# started on:
 # 20 june 2017
-# now 30 april 2019
+
+# latest edit on:
+# 02 may 2019
 
 # by mike bruno
 
 # inspired by phil klemmer
+
+# thank you john finn.  even if you don't know already... I am going to be asking you for help  lol
 
 # borrwed from all over.  for example:
 # https://github.com/jeremydosborn/lemonade_brwry
@@ -13,13 +18,20 @@
 # a million different google searches, which mostly lead to stackoverflow
 
 # thank you, sincerely
+# thank you Stephanie for letting me work on this, even when we should be spending time together  ;)  love you
+
+# this is a learning experience, and an enjoyable one at that
+
 
 
 import random
 import os
 from prettytable import PrettyTable
+# above I have imported the modules that I will be using for this project
 
 
+# nearly everything for my project is either in this class, or in the 'main' function below it.
+# I am not sure that one class is necessary or appropriate...  this was based on the lemonade brewery
 
 class brewery:
     def __init__(self):
@@ -35,10 +47,15 @@ class brewery:
         self.hops_cost = 10
         self.yeast = 0
         self.yeast_cost = 5
+# i have used the initialize function above to outline basic starting variables
+# the values or amounts of the above variables will change as one plays the game...
+# days will advance, your cash will fluctuate, you can set beer cost, outside temperate will change, the amount of supplies you have will change 
 
     def next_day(self):
         input("Press ENTER to advance to the next day. . . ")
         os.system('clear')
+# after doing something, whether that is buying or selling supplies, etc., i want to advance to the next day
+# also i am interested in keeping the terminal neat and clean, with only the needed information displayed
 
     def buy_supplies(self):
         sell_table = PrettyTable([" Item ", " Cost "])
@@ -48,6 +65,8 @@ class brewery:
         sell_table.add_row(["Item Not", "$25"])
         sell_table.add_row(["Box of Bottles - 150ct", "$35"])
         sell_table.reversesort = True
+# using pretty table to display infomation in a neat way
+# items on the left have their prices set in the init function at the beginning of the class
 
         while True:
             try:
@@ -65,6 +84,8 @@ class brewery:
                     continue
         self.malt += malt
         self.cash -= malt * (float(self.malt_cost))
+# when buying supplies, it will first ask you to purchase malt.  as long as the input is a real number, you can purchase that amount
+# eventually I would really like it to stop you from buying supplies if you have insufficient funds
 
         while True:
             try:
@@ -79,7 +100,9 @@ class brewery:
                 continue
         self.hops += hops
         self.cash -= hops * (float(self.hops_cost))
-
+# after malt the program asks you to purchase hops (think bags of hops, and eventually different types)
+# i have used 'valueerror' here, and in the other blocks of code in which it asks you to purchase supplies
+# i do not know why that is necessary, but it was used the example lemonade brewery, so I am following that example...
 
         while True:
             try:
@@ -94,14 +117,21 @@ class brewery:
                 continue
         self.yeast += yeast
         self.cash -= yeast * (float(self.yeast_cost))
+# last item i ask you to purchase is the yeast (packets)
+# eventually I would like to add the ability to buy beer bottles, caps, and fruit and specialty grains, etc.
 
         self.weather = random.randrange(45, 110)
+# setting the weather temperature.  it is a number between 45* and 110 degrees.  
+# I think I am going to use the 'weather' value to determine how well the beer sells 
+# warmer should equal more beer sold
 
         print("Supplies successfully purchased!  Total Cost: ${0}\n".format(
             float((malt * self.malt_cost) + (hops * self.hops_cost) + (yeast * self.yeast_cost))))
+# the total cost is equal to the amount of malt, hops, and yeast purchased, times their respective prices
 
         input("Press ENTER to return to previous screen. . . ")
         os.system('clear')
+# this ends the function in the brewery class, and should bring you back to the 'main' function.  which is basically the home screen
 
 
     def brew_beer(self):
@@ -116,6 +146,7 @@ class brewery:
         brew_tab.add_row(["8 (EXIT)", "", ""])
         brew_tab.reversesort = True
         print(brew_tab)
+# used PrettyTable again to display the different varieties you can brew, and how many of each ingredient it will cost
 
         def lager(self):
             self.malt -= 2
@@ -154,6 +185,9 @@ class brewery:
             self.hops -= 1
             print('This is a saison, all 100 bottles. ')
             #self.grain -= 3
+# on each of the beer types above, I have used a function to remove the number of supplies it takes to brew the beer, from you inventory
+# not 100% sure that setting each beer as a separate function is the best way to do this, but it is how I figured it out so far...
+# as of now all recipes brew 100 bottles.  would like for this to change and/or have some spoil in the future
 
         def exit(self):
             self.yeast += 1
@@ -161,6 +195,8 @@ class brewery:
             self.beer -= 100
             pass
             # not sure how to skip the changes after the 'if-statement belowwwww...'
+# I think i am adding the yeast and removing 100 bottles of beer because of the previously mentioned 'if-statement'...
+# for some reason it's always going to remove 1 yeast and add 100 bottles, so if you exit without brewing, it needs to be balanced
 
         brewing = input("What would you like to brew? ")
 
@@ -176,12 +212,16 @@ class brewery:
 
         if brewing in beers:
             beers[brewing](self)
+# if the answer to the 'input' question above is found in the ... dictionary? just below it, then
+# the answer to 'brewing' is a key, and that matches up to some value in the dictionary, it runs that value, which is a function.  
+# that function is to brew that particular beer
 
             self.beer += 100            
             self.yeast -= 1
             self.day += 1
             self.weather = random.randrange(45, 110)
             self.next_day()
+# so when that is all done, you gain 100 bottles of brewed beer, you use 1 yeast packet, and the day advances +1, then we run the next_day function
 
 
     def sell_beer(self):
@@ -198,7 +238,7 @@ class brewery:
                 continue
 
         bottles_sold = random.randrange(1, 1000)
-        price_factor = float(100 - price) / 100 # was 1000 insude
+        price_factor = float(100 - price) / 100 # was 1000 inside
         heat_factor = 1 - (((100 - self.weather) * 2) / float(100))
 
         if price == 0:
