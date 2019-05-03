@@ -13,7 +13,7 @@
 # thank you john finn.  even if you don't know already... I am going to be asking you for help  lol
 
 # borrwed from all over.  for example:
-# https://github.com/jeremydosborn/lemonade_brwry
+# https://github.com/jeremydosborn/lemonade_stand
 # and
 # a million different google searches, which mostly lead to stackoverflow
 
@@ -38,7 +38,6 @@ class brewery:
         self.day = 0
         self.cash = 100
         self.beer = 0
-        self.beer_cost = random.randrange(1, 100)
         self.weather = random.randrange(45, 110)
         # adding supplies here
         self.malt = 0
@@ -194,7 +193,7 @@ class brewery:
             self.day -= 1
             self.beer -= 100
             pass
-            # not sure how to skip the changes after the 'if-statement belowwwww...'
+            # not sure how to skip the changes after the 'if-statement below...'
 # I think i am adding the yeast and removing 100 bottles of beer because of the previously mentioned 'if-statement'...
 # for some reason it's always going to remove 1 yeast and add 100 bottles, so if you exit without brewing, it needs to be balanced
 
@@ -227,7 +226,7 @@ class brewery:
     def sell_beer(self):
         while True:
             try:
-                price = int(input("How much will you charge for a bottle of beer? "))
+                price = int(input("How much will you charge for a bottle of beer? (in cents [25 = $0.25 per beer]) "))
                 if price in range(0, 1001, 1):
                     break
                 else:
@@ -237,35 +236,35 @@ class brewery:
                 print("Please pick an amount between 1 and 1000.")
                 continue
 
-        bottles_sold = random.randrange(1, 1000)
-        price_factor = float(100 - price) / 100 # was 1000 inside
-        heat_factor = 1 - (((100 - self.weather) * 2) / float(100))
+        bottles_sold = random.randrange(1, 101) # how many bottles could have possibly been sold, without any other factors in play
+        price_factor = float(100 - price) / 100 # less demand as price goes up
+        heat_factor = 1 - (((110 - self.weather) * 2) / float(100)) # lower temp means less of a demand
 
         if price == 0:
             self.beer = 0
             print("All of your beer sold for nothing, because you gave it all away for free!")
             self.day += 1
-            self.weather = random.randrange(50, 100)
-            self.beer_cost = random.randrange(1, 10)
+            self.weather = random.randrange(45, 110) # guess we need to reset the weather temp before advancing to the next day?
         demand = int(round(bottles_sold * price_factor * heat_factor))
         if demand > self.beer:
             print("You only have {0} bottles of beer, but there was demand for {1} bottles!".format(self.beer, demand))
             demand = self.beer
         revenue = demand * round((float(price) / 100), 2)
         self.beer -= demand
-        self.cash += revenue
+        self.cash += round(revenue, 2)
         self.day += 1
         self.weather = random.randrange(45, 110)
-        print("You sold {0} bottles of beer and earned ${1} dollars!\n".format(demand, revenue))
+        print("You sold {0} bottles of beer and earned ${1} dollars!\n".format(demand, round(revenue, 2)))
         self.next_day()
-
+# i have had instances where I sell negative bottles of beer and earn negative money(a.k.a. lose)
+# and when i sell negative bottles of beer, it adds to the amount I have... positive number minus a negative is like adding that number
 
     def display_data(self, name):
         if self.day == 0:
             print("\nWelcome to {0} !\n".format(name))
         print("Day: {0}".format(self.day))
         print("Weather: {0}*".format(self.weather))
-        print("Cash: ${0}".format(self.cash))
+        print("Cash: ${0}".format(round(self.cash, 2)))
         print("Bottles of Beer: {0}".format(self.beer))
         print("\n")
 
@@ -273,6 +272,8 @@ class brewery:
         print("Bags of Hops: {0}".format(self.hops))
         print("Packs of Yeast: {0}".format(self.yeast))
         print("\n" + "=" * 50 + '\n')
+# all the displat data for the 'home screen'
+# maybe I will remake this to a PrettyTable.  guess we will see.
 
 
 
@@ -327,11 +328,12 @@ main()
 # ------------------ TO DO LIST ------------------
 # no more negatives - can't spend more than you have 
 # days should not advance when you exit the purchase screen
+# sometimes you can sell a negative number of bottles, which removes money from you
 # need all ingredients to brew
 # opportunities to hire workers : workers give bonuses (new recipes, etc) 
 # random chances to get supplies
 # supplies spoil
-#
+# kegs?
 #
 # ------------------ TO DO LIST ------------------
 
