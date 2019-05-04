@@ -4,7 +4,7 @@
 # 20 june 2017
 
 # latest edit on:
-# 02 may 2019
+# 03 may 2019
 
 # by mike bruno
 
@@ -41,9 +41,9 @@ class brewery:
         self.weather = random.randrange(45, 110)
         # adding supplies here
         self.malt = 0
-        self.malt_cost = 20
+        self.malt_cost = 15
         self.hops = 0
-        self.hops_cost = 10
+        self.hops_cost = 5
         self.yeast = 0
         self.yeast_cost = 5
 # i have used the initialize function above to outline basic starting variables
@@ -56,12 +56,16 @@ class brewery:
 # after doing something, whether that is buying or selling supplies, etc., i want to advance to the next day
 # also i am interested in keeping the terminal neat and clean, with only the needed information displayed
 
+    def go_back(self):
+        input("Press ENTER to return to the previous screen . . . ")
+        os.system('clear')    
+
     def buy_supplies(self):
         sell_table = PrettyTable([" Item ", " Cost "])
         sell_table.add_row(["Malt", "$20"])
         sell_table.add_row(["Hops", "$10"])
         sell_table.add_row(["Yeast", "$5"])
-        sell_table.add_row(["Item Not", "$25"])
+        sell_table.add_row(["Item Not Found", "$25"])
         sell_table.add_row(["Box of Bottles - 150ct", "$35"])
         sell_table.reversesort = True
 # using pretty table to display infomation in a neat way
@@ -135,13 +139,13 @@ class brewery:
 
     def brew_beer(self):
         brew_tab = PrettyTable(["Selection Number", "Beer", "Required Ingredients"])
-        brew_tab.add_row(["1", "Lager", "2 Malt, 1 Hops, 1 Yeast"])
-        brew_tab.add_row(["2", "Ale", "1 Malt, 2 Hops, 1 Yeast"])
-        brew_tab.add_row(["3", "IPA", "2 Malt, 3 Hops, 1 Yeast"])
-        brew_tab.add_row(["4", "Hefeweizen", "2 Malt, 1 Yeast"])
-        brew_tab.add_row(["5", "Stout", "3 Malt, 1 Hops, 1 Grain, 1 Yeast"])
-        brew_tab.add_row(["6", "Cherry Wheat Ale", "2 Malt, 1 Hops, 1 Grain, \n1 Cherries, 1 Yeast"])
-        brew_tab.add_row(["7", "Saison", "2 Malt, 1 Hops, 3 Grains, 1 Yeast"])
+        brew_tab.add_row(["1", "Lager", "2 Malt, 1 Hops, 1 Yeast"]) # cost = 40
+        brew_tab.add_row(["2", "Ale", "1 Malt, 2 Hops, 1 Yeast"]) # cost = 30
+        brew_tab.add_row(["3", "IPA", "2 Malt, 3 Hops, 1 Yeast"]) # cost = 50
+        brew_tab.add_row(["4", "Hefeweizen", "2 Malt, 1 Yeast"]) # cost = 35
+        brew_tab.add_row(["5", "Stout", "3 Malt, 1 Hops, 1 Grain, 1 Yeast"]) # no price for grain yet
+        brew_tab.add_row(["6", "Cherry Wheat Ale", "2 Malt, 1 Hops, 1 Grain, \n1 Cherries, 1 Yeast"]) # no price for gain or cherries
+        brew_tab.add_row(["7", "Saison", "2 Malt, 1 Hops, 3 Grains, 1 Yeast"]) # no price for grains yet
         brew_tab.add_row(["8 (EXIT)", "", ""])
         brew_tab.reversesort = True
         print(brew_tab)
@@ -151,6 +155,7 @@ class brewery:
             self.malt -= 2
             self.hops -= 1
             print('This lager recipe filled up 100 bottles. ')
+# could this be a dictionary or a set? would that be better for all of these?
 
         def ale(self):
             self.malt -= 1
@@ -169,13 +174,13 @@ class brewery:
         def stout(self):
             self.malt -= 3
             self.hops -= 1
-            #self.grain -= 1
+            #self.grain -= 1 -----> coming up in the future
             print('100 bottle of stout.')
 
         def cwa(self):
             self.malt -= 2
             self.hops -= 1
-            #self.grain -= 1
+            #self.grain -= 1 -----> this should be coming up in the future
             #self.fruit -= 1
             print('This recipe made 100 bottles of Cherry Wheat Ale. ')
 
@@ -188,14 +193,15 @@ class brewery:
 # not 100% sure that setting each beer as a separate function is the best way to do this, but it is how I figured it out so far...
 # as of now all recipes brew 100 bottles.  would like for this to change and/or have some spoil in the future
 
-        def exit(self):
-            self.yeast += 1
-            self.day -= 1
-            self.beer -= 100
-            pass
+        #def exit(self):
+            #self.yeast += 1
+            #self.day -= 1
+            #self.beer -= 100
+            #pass
             # not sure how to skip the changes after the 'if-statement below...'
 # I think i am adding the yeast and removing 100 bottles of beer because of the previously mentioned 'if-statement'...
 # for some reason it's always going to remove 1 yeast and add 100 bottles, so if you exit without brewing, it needs to be balanced
+# I think this is because 'key' 8 has a value of 'exit'.  and since this is found in the dictionary, it is going to follow the code block
 
         brewing = input("What would you like to brew? ")
 
@@ -206,8 +212,7 @@ class brewery:
         '4' : hefe,
         '5' : stout,
         '6' : cwa,
-        '7' : saison,
-        '8' : exit,}
+        '7' : saison}
 
         if brewing in beers:
             beers[brewing](self)
@@ -219,7 +224,9 @@ class brewery:
             self.yeast -= 1
             self.day += 1
             self.weather = random.randrange(45, 110)
-            self.next_day()
+            self.go_back()
+        else:
+            self.go_back()
 # so when that is all done, you gain 100 bottles of brewed beer, you use 1 yeast packet, and the day advances +1, then we run the next_day function
 
 
@@ -238,7 +245,7 @@ class brewery:
 
         bottles_sold = random.randrange(1, 101) # how many bottles could have possibly been sold, without any other factors in play
         price_factor = float(100 - price) / 100 # less demand as price goes up
-        heat_factor = 1 - (((110 - self.weather) * 2) / float(100)) # lower temp means less of a demand
+        heat_factor = 1 - (((110 - self.weather)) / float(100)) # lower temp means less of a demand, removing the * 2 after self.weather
 
         if price == 0:
             self.beer = 0
@@ -299,7 +306,7 @@ def main():
                     continue
                 elif choose == '2':
                     os.system('clear')
-                    brwry.brew_beer()
+                    brwry.brew_beer() # run method that is in the class
                     brwry.display_data(name)
                     continue
                 elif choose == '3':
