@@ -1,16 +1,13 @@
 # the brew brothers
 
-# started on:
-# 20 june 2017
-
 # latest edit on:
-# 03 may 2019
+# 17 Aug 2019
 
-# by mike bruno
+# by mikeb
 
-# inspired by phil klemmer
+# inspired by philk
 
-# thank you john finn.  even if you don't know already... I am going to be asking you for help  lol
+# thank you johnf.  even if you don't know already... I am going to be asking you for help  lol
 
 # borrwed from all over.  for example:
 # https://github.com/jeremydosborn/lemonade_stand
@@ -18,7 +15,7 @@
 # a million different google searches, which mostly lead to stackoverflow
 
 # thank you, sincerely
-# thank you Stephanie for letting me work on this, even when we should be spending time together  ;)  love you
+# thank you S for letting me work on this, even when we should be spending time together  ;)  love you
 
 # this is a learning experience, and an enjoyable one at that
 
@@ -58,7 +55,8 @@ class brewery:
 
     def go_back(self):
         input("Press ENTER to return to the previous screen . . . ")
-        os.system('clear')    
+        os.system('clear')
+# not sure that next_day and go_back are both needed, but i like to know what I'm doing (advancing or just going back)    
 
     def buy_supplies(self):
         sell_table = PrettyTable([" Item ", " Cost "])
@@ -193,16 +191,6 @@ class brewery:
 # not 100% sure that setting each beer as a separate function is the best way to do this, but it is how I figured it out so far...
 # as of now all recipes brew 100 bottles.  would like for this to change and/or have some spoil in the future
 
-        #def exit(self):
-            #self.yeast += 1
-            #self.day -= 1
-            #self.beer -= 100
-            #pass
-            # not sure how to skip the changes after the 'if-statement below...'
-# I think i am adding the yeast and removing 100 bottles of beer because of the previously mentioned 'if-statement'...
-# for some reason it's always going to remove 1 yeast and add 100 bottles, so if you exit without brewing, it needs to be balanced
-# I think this is because 'key' 8 has a value of 'exit'.  and since this is found in the dictionary, it is going to follow the code block
-
         brewing = input("What would you like to brew? ")
 
         beers = {
@@ -244,8 +232,8 @@ class brewery:
                 continue
 
         bottles_sold = random.randrange(1, 101) # how many bottles could have possibly been sold, without any other factors in play
-        price_factor = float(100 - price) / 100 # less demand as price goes up
-        heat_factor = 1 - (((110 - self.weather)) / float(100)) # lower temp means less of a demand, removing the * 2 after self.weather
+        price_factor = float(100 - price) / 10 # less demand as price goes up, changed from 100 to 10
+        heat_factor = 1 - (((110 - self.weather) * 2) / float(100)) # lower temp means less of a demand, 
 
         if price == 0:
             self.beer = 0
